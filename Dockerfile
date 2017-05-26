@@ -14,7 +14,7 @@ ENV PATH ${GOBIN}:${GOROOT}/bin:$PATH
 RUN mkdir -p ${GOPATH} && \
     chown -R ${JENKINS_UID}:${JENKINS_GID} ${GOPATH} && \
     apt-get update -y && \
-    apt-get install -y curl ca-certificates && \
+    apt-get install -y curl ca-certificates git && \
     curl -O ${GO_DOWNLOAD_URL} && \
     echo "${GO_ARCHIVE_CHECKSUM} ${GO_ARCHIVE}" | sha256sum -c - && \
     tar -C /usr/local -xzf ${GO_ARCHIVE} && \
