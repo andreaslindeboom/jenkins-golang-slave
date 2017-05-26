@@ -7,13 +7,15 @@ ENV GO_DOWNLOAD_URL https://storage.googleapis.com/golang/${GO_ARCHIVE}
 ENV GOPATH=/go
 ENV GOROOT /usr/local/go
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
+ENV JENKINS_USER=jenkins
 
 USER root
 
 RUN mkdir -p ${GOPATH} && \
+    chown -R ${JENKINS_USER}:${JENKINS_USER} ${GOPATH} && \
     curl -O ${GO_DOWNLOAD_URL} && \
     echo "${GO_ARCHIVE_CHECKSUM} ${GO_ARCHIVE}" | sha256sum -c - && \
     tar -C /usr/local -xzf ${GO_ARCHIVE} && \
     rm ${GO_ARCHIVE}
 
-USER jenkins
+USER ${JENKINS_USER}
