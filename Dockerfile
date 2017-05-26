@@ -19,4 +19,6 @@ RUN mkdir -p ${GOPATH} && \
     tar -C /usr/local -xzf ${GO_ARCHIVE} && \
     rm ${GO_ARCHIVE}
 
+VOLUME ${GOPATH}
+
 USER ${JENKINS_USER}
