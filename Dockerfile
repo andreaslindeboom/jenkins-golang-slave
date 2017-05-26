@@ -1,4 +1,4 @@
-FROM jenkinsci/slave:3.7-1
+FROM debian:jessie
 
 ENV GO_VERSION 1.8.3
 ENV GO_ARCHIVE go${GO_VERSION}.linux-amd64.tar.gz
@@ -8,17 +8,20 @@ ENV GOPATH /go
 ENV GOBIN ${GOPATH}/bin
 ENV GOROOT /usr/local/go
 ENV PATH ${GOBIN}:${GOROOT}/bin:$PATH
-ENV JENKINS_USER=jenkins
+ENV GO_USER go
 
-USER root
-
-RUN mkdir -p ${GOPATH} && \
-    chown -R ${JENKINS_USER}:${JENKINS_USER} ${GOPATH} && \
+RUN groupadd ${GO_USER} && \
+    useradd -g ${GO_USER} ${GO_USER} && \
+    mkdir -p ${GOPATH} && \
+    chown -R ${GO_USER}:${GO_USER} ${GOPATH} && \
+    apt-get update -y && \
+    apt-get install -y curl ca-certificates && \
     curl -O ${GO_DOWNLOAD_URL} && \
     echo "${GO_ARCHIVE_CHECKSUM} ${GO_ARCHIVE}" | sha256sum -c - && \
     tar -C /usr/local -xzf ${GO_ARCHIVE} && \
-    rm ${GO_ARCHIVE}
+    rm ${GO_ARCHIVE} && \
+    rm -rf /var/lib/apt/lists/*
 
 VOLUME ${GOPATH}
 
-USER ${JENKINS_USER}
+USER ${GO_USER}
