@@ -11,9 +11,7 @@ ENV GOBIN ${GOPATH}/bin
 ENV GOROOT /usr/local/go
 ENV PATH ${GOBIN}:${GOROOT}/bin:$PATH
 
-RUN groupadd ${GO_USER} && \
-    useradd -g ${GO_USER} ${GO_USER} && \
-    mkdir -p ${GOPATH} && \
+RUN mkdir -p ${GOPATH} && \
     chown -R ${JENKINS_UID}:${JENKINS_GID} ${GOPATH} && \
     apt-get update -y && \
     apt-get install -y curl ca-certificates && \
